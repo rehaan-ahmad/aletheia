@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .models import VerifyRequest, VerifyResponse, ClaimResult
+from models import VerifyRequest, VerifyResponse, ClaimResult
 
 app = FastAPI(title="Aletheia API")
 
