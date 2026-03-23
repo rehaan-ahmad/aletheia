@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+sqlalchemy
+aiosqlite
+langgraph
+langchain
+langchain-google-genai
+langchain-community
+duckduckgo-search
+slowapi
+python-dotenv
+beautifulsoup4
+requests
