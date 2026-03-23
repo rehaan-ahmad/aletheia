@@ -1,24 +1,11 @@
-# Python
-backend/venv/
-backend/__pycache__/
-backend/**/__pycache__/
-backend/*.pyc
-backend/.env
-
-# Node
-frontend/node_modules/
-frontend/.next/
-frontend/.env.local
-frontend/out/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Misc
-*.log
-*.tmp
+.env
+.env.local
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.next/
+*.db
+*.db-shm
+*.db-wal
