@@ -35,7 +35,11 @@ export default function ReportHeader({ report }: { report: any }) {
     <div className="w-full glass p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-violet-500/20 shadow-lg">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-3">
-          {report.input_type === 'url' ? (
+          {report.input_type === 'image' ? (
+            <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
+              <span className="text-white font-medium truncate max-w-[300px]">Image Analysis</span>
+            </div>
+          ) : report.input_type === 'url' ? (
             <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
               <img src={`https://www.google.com/s2/favicons?domain=${new URL(report.input_source).hostname}&sz=32`} alt="icon" className="w-5 h-5 rounded-sm" />
               <a href={report.input_source} target="_blank" rel="noreferrer" className="text-white font-medium hover:text-cyan-400 truncate max-w-[300px] transition-colors hover:underline">

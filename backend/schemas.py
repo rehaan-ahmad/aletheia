@@ -6,6 +6,7 @@ from datetime import datetime
 class VerifyRequest(BaseModel):
     text: Optional[str] = None
     url: Optional[str] = None
+    input_type: Optional[str] = None
     enable_ai_detection: bool = True
     enable_media_detection: bool = False
 
@@ -91,7 +92,7 @@ class MediaDetectionResult(BaseModel):
 class AccuracyReport(BaseModel):
     report_id: str
     input_source: str
-    input_type: Literal["text", "url"]
+    input_type: Literal["text", "url", "image"]
     input_preview: str          # first 200 chars for display
     article_title: Optional[str] = None
     claims: List[ClaimVerification]

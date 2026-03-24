@@ -2,11 +2,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { Loader2, Link2, Type, Check, AlertCircle } from 'lucide-react'
+import { Loader2, Link2, Type, Check, AlertCircle, Image as ImageIcon } from 'lucide-react'
 
 export default function InputCard({ defaultText = '' }: { defaultText?: string }) {
   const router = useRouter()
-  const [tab, setTab] = useState<'text' | 'url'>('text')
+  const [tab, setTab] = useState<'text' | 'url' | 'image'>('text')
   const [text, setText] = useState(defaultText)
   const [url, setUrl] = useState('')
   const [aiDetection, setAiDetection] = useState(true)
@@ -72,21 +72,21 @@ export default function InputCard({ defaultText = '' }: { defaultText?: string }
           <Type size={18} /> Text Input
         </button>
         <button
-          onClick={() => setTab('url')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${tab === 'url' ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
+          onClick={() => { setTab('image'); setMediaAnalysis(true); setAiDetection(false); }}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${tab === 'image' ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
         >
-          <Link2 size={18} /> URL Input
+          <ImageIcon size={18} /> Image
         </button>
         {/* Animated indicator */}
         <motion.div
-          layoutId="tab-indicator"
-          className="absolute bottom-[-1px] h-[2px] bg-violet-500"
-          initial={false}
-          animate={{
-            width: tab === 'text' ? 120 : 120,
-            x: tab === 'text' ? 0 : 133
-          }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+           layoutId="tab-indicator"
+           className="absolute bottom-[-1px] h-[2px] bg-violet-500"
+           initial={false}
+           animate={{
+             width: tab === 'text' ? 120 : tab === 'url' ? 120 : 100,
+             x: tab === 'text' ? 0 : tab === 'url' ? 133 : 266
+           }}
+           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       </div>
 
@@ -113,7 +113,7 @@ export default function InputCard({ defaultText = '' }: { defaultText?: string }
                 {text.length > 0 && <span>~{claimCount} claims to verify</span>}
               </div>
             </motion.div>
-          ) : (
+          ) : tab === 'url' ? (
             <motion.div
               key="url"
               initial={{ opacity: 0, y: 10 }}
@@ -134,6 +134,26 @@ export default function InputCard({ defaultText = '' }: { defaultText?: string }
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com/article"
+                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="image"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="relative"
+            >
+              <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                <ImageIcon className="text-slate-500" size={20} />
+              </div>
+              <input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com/image.jpg"
                 className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
               />
             </motion.div>

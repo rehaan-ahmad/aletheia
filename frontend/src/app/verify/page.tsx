@@ -29,7 +29,8 @@ export default function VerifyPage() {
     // FastAPI verify endpoint expects text or url
     const apiPayload = {
       text: p.type === 'text' ? p.content : undefined,
-      url: p.type === 'url' ? p.content : undefined,
+      url: (p.type === 'url' || p.type === 'image') ? p.content : undefined,
+      input_type: p.type,
       enable_ai_detection: p.ai,
       enable_media_detection: p.media
     }

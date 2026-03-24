@@ -50,7 +50,8 @@ export default function ReportPage() {
     >
       <ReportHeader report={report} />
       
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+      {report.input_type !== 'image' && (
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 mb-8">
         {/* Top left - Accuracy Meter */}
         <div className="lg:col-span-4 h-[300px]">
            <AccuracyMeter score={report.overall_accuracy_score} counts={report.verdict_counts} />
@@ -61,6 +62,7 @@ export default function ReportPage() {
            <OriginalTextHighlighter text={report.input_preview} claims={report.claims} />     
         </div>
       </div>
+      )}
 
       {/* Detection Panels */}
       {(report.ai_detection || report.media_detection) && (
@@ -71,6 +73,7 @@ export default function ReportPage() {
       )}
 
       {/* Claim Explorer */}
+      {report.input_type !== 'image' && (
       <div className="w-full mt-8 flex flex-col">
         <div className="flex flex-col md:flex-row justify-between items-end mb-6">
           <div className="mb-4 md:mb-0">
@@ -88,6 +91,7 @@ export default function ReportPage() {
         
         <ClaimExplorer claims={report.claims} filter={filter} sort={sort} search={search} />
       </div>
+      )}
 
     </motion.div>
   )

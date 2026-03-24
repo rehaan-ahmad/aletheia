@@ -25,7 +25,7 @@ async def verify_stream_generator(request: Request, body: VerifyRequest):
     report_id = str(uuid.uuid4())
     input_text = body.text or ""
     
-    if body.url:
+    if body.url and body.input_type != 'image':
         yield generate_sse("status", {"step": "scrape", "message": "Fetching source text...", "progress": 5})
         try:
             input_text = await asyncio.to_thread(scrape_url, body.url)
@@ -34,6 +34,29 @@ async def verify_stream_generator(request: Request, body: VerifyRequest):
             
     input_source = body.url if body.url else "Text Input"
     
+    if body.input_type == "image":
+        yield generate_sse("status", {"step": "report", "message": "Analyzing image for deepfakes...", "progress": 50})
+        media_res = None
+        if body.enable_media_detection and body.url:
+            media_res = await asyncio.to_thread(detect_media, body.url)
+            
+        report = AccuracyReport(
+            report_id=report_id,
+            input_source=body.url or "Unknown Image",
+            input_type="image",
+            input_preview=body.url or "Image Media",
+            claims=[],
+            overall_accuracy_score=0.0,
+            verdict_counts={"True": 0, "False": 0, "Partially True": 0, "Unverifiable": 0},
+            summary="Image media analysis completed.",
+            ai_detection=None,
+            media_detection=media_res,
+            processing_time_seconds=round(time.time() - start_time, 2),
+            created_at=datetime.utcnow().isoformat()
+        )
+        yield generate_sse("done", {"report": report.model_dump(), "progress": 100})
+        return
+        
     # --- INSTANT SEEDED CACHE DEMOS ---
     if is_demo_text(input_text):
         for event, data in get_demo_events(input_text, report_id):
