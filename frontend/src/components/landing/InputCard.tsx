@@ -43,7 +43,7 @@ export default function InputCard({ defaultText = '' }: { defaultText?: string }
 
   const handleVerify = () => {
     if (tab === 'text' && text.length < 30) return
-    if (tab === 'url' && !url.startsWith('http')) return
+    if ((tab === 'url' || tab === 'image') && !url.startsWith('http')) return
     
     setLoading(true)
     const payload = {
@@ -70,6 +70,12 @@ export default function InputCard({ defaultText = '' }: { defaultText?: string }
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${tab === 'text' ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
         >
           <Type size={18} /> Text Input
+        </button>
+        <button
+          onClick={() => setTab('url')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${tab === 'url' ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
+        >
+          <Link2 size={18} /> URL Input
         </button>
         <button
           onClick={() => { setTab('image'); setMediaAnalysis(true); setAiDetection(false); }}

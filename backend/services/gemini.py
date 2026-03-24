@@ -5,7 +5,7 @@ settings = get_settings()
 
 def get_gemini_model(temperature=0.0):
     return ChatGoogleGenerativeAI(
-        model="gemini-1.5-pro",
+        model="gemini-2.5-flash",
         temperature=temperature,
         google_api_key=settings.gemini_api_key,
         max_output_tokens=8192
