@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { Loader2, Link2, Type, Check, AlertCircle, Image as ImageIcon } from 'lucide-react'
+import { Loader2, Link2, Type, AlertCircle, Image as ImageIcon } from 'lucide-react'
 
 export default function InputCard({ defaultText = '' }: { defaultText?: string }) {
   const router = useRouter()

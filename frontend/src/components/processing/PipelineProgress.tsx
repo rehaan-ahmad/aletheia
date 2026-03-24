@@ -31,7 +31,6 @@ const SearchAnimation = ({ progress }: { progress: number }) => {
       .add({ targets: containerRef.current.querySelector('.circle'), translateX: '10rem' }, 500)
       .add({ targets: containerRef.current.querySelector('.triangle'), translateX: '10rem' }, 1000)
       
-      tlRef.current.seek(tlRef.current.duration * (progress / 100))
     }).catch(err => console.error("Failed to load animejs", err))
     
     return () => { mounted = false }
