@@ -1,6 +1,7 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, XCircle, AlertTriangle, HelpCircle } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 interface Claim {
   claim_id: string
@@ -14,6 +15,70 @@ const VERDICT_STYLES = {
   'False': { color: 'text-rose-400', bg: 'bg-rose-500/10', bar: 'bg-rose-500', icon: <XCircle size={16} /> },
   'Partially True': { color: 'text-amber-400', bg: 'bg-amber-500/10', bar: 'bg-amber-500', icon: <AlertTriangle size={16} /> },
   'Unverifiable': { color: 'text-slate-400', bg: 'bg-slate-500/10', bar: 'bg-slate-500', icon: <HelpCircle size={16} /> }
+}
+
+const MorphingSVG = () => {
+  const svgRef = useRef<SVGSVGElement>(null)
+
+  useEffect(() => {
+    let animationActive = true;
+    let currentAnimation: any = null;
+
+    import('animejs').then((animejs) => {
+      const { animate, svg, utils } = animejs;
+      if (!svgRef.current || !animationActive) return;
+
+      const polygons = svgRef.current.querySelectorAll('polygon');
+      if (polygons.length < 2) return;
+      const $path1 = polygons[0];
+      const $path2 = polygons[1];
+
+      function generatePoints() {
+        const total = utils.random(4, 20);
+        const r1 = utils.random(4, 24);
+        const r2 = 24;
+        const isOdd = (n: number) => n % 2;
+        let points = '';
+        for (let i = 0, l = isOdd(total) ? total + 1 : total; i < l; i++) {
+          const r = isOdd(i) ? r1 : r2;
+          const a = (2 * Math.PI * i / l) - Math.PI / 2;
+          const x = 28 + utils.round(r * Math.cos(a), 0);
+          const y = 28 + utils.round(r * Math.sin(a), 0);
+          points += `${x},${y} `;
+        }
+        return points;
+      }
+
+      function animateRandomPoints() {
+        if (!animationActive) return;
+        utils.set($path2, { points: generatePoints() });
+        currentAnimation = animate($path1, {
+          points: svg.morphTo($path2),
+          ease: 'inOutCirc',
+          duration: 1000,
+          onComplete: animateRandomPoints
+        });
+      }
+
+      animateRandomPoints();
+    });
+
+    return () => {
+      animationActive = false;
+      if (currentAnimation && typeof currentAnimation.pause === 'function') {
+        currentAnimation.pause();
+      }
+    }
+  }, [])
+
+  return (
+    <div className="w-14 h-14 shrink-0 flex items-center justify-center opacity-80 pointer-events-none">
+      <svg ref={svgRef} width="56" height="56" viewBox="0 0 56 56" className="w-full h-full fill-cyan-400/50 mix-blend-screen drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
+        <polygon />
+        <polygon className="hidden" />
+      </svg>
+    </div>
+  )
 }
 
 export default function LiveClaimFeed({ claims }: { claims: Claim[] }) {
@@ -43,9 +108,12 @@ export default function LiveClaimFeed({ claims }: { claims: Claim[] }) {
                 className="w-full glass p-5 rounded-xl border-l-[4px] shadow-lg flex flex-col gap-3"
                 style={{ borderLeftColor: `var(--color-${style.color.split('-')[1]}-500, currentColor)` }}
               >
-                <p className="text-white text-md font-medium leading-relaxed">
-                  "{claim.claim_text.length > 80 ? claim.claim_text.substring(0, 80) + '...' : claim.claim_text}"
-                </p>
+                <div className="flex items-center gap-4">
+                  <MorphingSVG />
+                  <p className="text-white text-md font-medium leading-relaxed flex-1">
+                    "{claim.claim_text.length > 80 ? claim.claim_text.substring(0, 80) + '...' : claim.claim_text}"
+                  </p>
+                </div>
                 
                 <div className="flex items-center justify-between mt-auto pt-2 border-t border-white/5">
                   <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold ${style.bg} ${style.color} uppercase tracking-wider`}>

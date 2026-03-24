@@ -2,7 +2,6 @@
 import { motion } from 'framer-motion'
 import { FileText, Search, Shield, FileOutput, CheckCircle2, CircleDashed, Loader2 } from 'lucide-react'
 import { useEffect, useRef } from 'react'
-import anime from 'animejs'
 
 type StepStatus = 'pending' | 'active' | 'done'
 
@@ -19,15 +18,23 @@ const SearchAnimation = ({ progress }: { progress: number }) => {
   const tlRef = useRef<any>(null)
 
   useEffect(() => {
-    if (!containerRef.current) return
-    tlRef.current = anime.timeline({
-      easing: 'easeInOutExpo',
-      duration: 1500,
-      autoplay: false,
-    })
-    .add({ targets: containerRef.current.querySelector('.square'), translateX: '10rem' }, 0)
-    .add({ targets: containerRef.current.querySelector('.circle'), translateX: '10rem' }, 500)
-    .add({ targets: containerRef.current.querySelector('.triangle'), translateX: '10rem' }, 1000)
+    let mounted = true
+    import('animejs').then((animeModule) => {
+      if (!mounted || !containerRef.current) return
+      const anime: any = (animeModule as any).default || animeModule
+      tlRef.current = anime.timeline({
+        easing: 'easeInOutExpo',
+        duration: 1500,
+        autoplay: false,
+      })
+      .add({ targets: containerRef.current.querySelector('.square'), translateX: '10rem' }, 0)
+      .add({ targets: containerRef.current.querySelector('.circle'), translateX: '10rem' }, 500)
+      .add({ targets: containerRef.current.querySelector('.triangle'), translateX: '10rem' }, 1000)
+      
+      tlRef.current.seek(tlRef.current.duration * (progress / 100))
+    }).catch(err => console.error("Failed to load animejs", err))
+    
+    return () => { mounted = false }
   }, [])
 
   useEffect(() => {
