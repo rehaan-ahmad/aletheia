@@ -9,8 +9,9 @@ def extract_claims(text: str) -> ExtractionResult:
     
     prompt = PromptTemplate(
         input_variables=["text"],
-        template="""You are an expert fact-checking AI. Your task is to extract verifiable, distinct, and standalone atomic claims from the text.
+        template="""You are an expert fact-checking AI. Your task is to extract up to 20 verifiable, distinct, and standalone atomic claims from the text.
         Skip subjective statements, opinions, and questions.
+        Ensure you thoroughly scan the text to maximize the number of valid claims extracted, capping at 20.
         For each claim, provide the original_context snippet verbatim from the text.
         
         Text:

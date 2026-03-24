@@ -49,6 +49,11 @@ const MorphingSVG = () => {
         return points;
       }
 
+      // Initialize points immediately so Anime doesn't read empty paths
+      const startPoints = generatePoints();
+      $path1.setAttribute('points', startPoints);
+      $path2.setAttribute('points', startPoints);
+
       function animateRandomPoints() {
         if (!animationActive) return;
         utils.set($path2, { points: generatePoints() });
