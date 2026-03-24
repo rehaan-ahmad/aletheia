@@ -6,9 +6,9 @@
 
 ## Features
 - **Multi-agent LangGraph Pipeline:** (Extract → Retrieve → Verify) orchestrates the lifecycle of fact-checking safely.
-- **FIRE Iterative Retrieval:** Performs contextually-aware searches with up to 3 iterations per claim.
-- **Chain-of-Thought Verification:** Deep CoT conflict resolution using highest-credibility sources.
-- **Real-time SSE Streaming:** Provides immediate, step-by-step UI progress feedback for users.
+- **Concurrent FIRE Iterative Retrieval:** Processes multiple claims completely in parallel using `asyncio` threadpools with DuckDuckGo Search.
+- **Instant Demo Cache:** Pre-seeded fallback database for presentation examples allowing <1 second resolution.
+- **Real-time SSE Streaming:** Provides immediate, step-by-step UI progress feedback to users alongside dynamic AnimeJS vector morphing.
 - **Source Credibility Weighting:** Ranks sources intelligently (High/Medium/Low) based on domain trust algorithms.
 - **Temporal Sensitivity Detection:** Detects date-sensitive keywords like "latest" and injects current-year parameters.
 - **AI-generated Text Detection:** Integrates GPTZero to parse and flag synthetic sentences.
@@ -35,7 +35,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 cp ../.env.example ../.env
 ```
-Populate `.env` with actual `GEMINI_API_KEY`, `TAVILY_API_KEY`, etc.
+Populate `.env` with actual `GEMINI_API_KEY`, `GPTZERO_API_KEY`, and `HIVE_API_KEY`. (Note: DuckDuckGo search is completely free and requires no key).
 
 **3. Run the Backend API**
 ```bash
