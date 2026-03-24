@@ -64,7 +64,7 @@ async def verify_stream_generator(request: Request, body: VerifyRequest):
             "search_queries": [],
             "citations": [],
             "iteration": 0,
-            "max_iterations": 2,
+            "max_iterations": 1,
             "is_confident": False,
         }
         try:

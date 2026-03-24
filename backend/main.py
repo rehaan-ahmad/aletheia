@@ -70,7 +70,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # ── Routers ─────────────────────────────────────────────────
-app.include_router(verify.router, prefix="/api", tags=["verify"])
+app.include_router(verify.router, prefix="/api/verify", tags=["verify"])
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(reports.router, prefix="/api", tags=["reports"])
 app.include_router(detect.router, prefix="/api", tags=["detect"])
