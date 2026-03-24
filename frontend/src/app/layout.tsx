@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/ui/Providers'
 import Link from 'next/link'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains' })
@@ -36,10 +37,12 @@ export default function RootLayout({
                 Aletheia
               </span>
             </Link>
-            <div className="flex gap-6 text-sm font-medium text-slate-300">
+            <div className="flex gap-6 items-center text-sm font-medium text-slate-300">
               <Link href="/" className="hover:text-white transition-colors">Home</Link>
               <Link href="/history" className="hover:text-white transition-colors">History</Link>
               <a href="https://github.com/rehaan-ahmad/aletheia" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">GitHub</a>
+              <div className="w-[1px] h-4 bg-slate-300/30 mx-1"></div>
+              <ThemeToggle />
             </div>
           </nav>
 
